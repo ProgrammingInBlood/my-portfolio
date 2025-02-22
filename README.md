@@ -36,8 +36,8 @@ I'm passionate about creating exceptional digital experiences that combine cutti
 
 ### Get in Touch
 
-- 💼 [LinkedIn](https://linkedin.com)
-- 💻 [GitHub](https://github.com)
+- 💼 [LinkedIn](https://www.linkedin.com/in/eklavyaraj/)
+- 💻 [GitHub](https://github.com/ProgrammingInBlood)
 - 📱 [WhatsApp](https://wa.me/919063259072)
 
 ## Portfolio Website

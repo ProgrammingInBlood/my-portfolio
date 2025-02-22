@@ -11,6 +11,10 @@ interface SkillItem {
   icon: keyof typeof iconMap;
 }
 
+interface SkillGroup {
+  [key: string]: SkillItem[] | { [key: string]: SkillItem[] };
+}
+
 const commands = [
   { 
     command: 'whoami',
@@ -108,7 +112,7 @@ const commands = [
       <div className="space-y-3">
         <div className="flex items-center gap-2 mb-4">
           <FaHeart className="text-accent-1 text-xl" />
-          <span>I'm passionate about crafting exceptional digital experiences that combine 
+          <span>I&apos;m passionate about crafting exceptional digital experiences that combine 
 cutting-edge technology with elegant design. My focus areas include:</span>
         </div>
         <div className="space-y-2">
@@ -202,10 +206,10 @@ export default function About() {
 
     // Try to parse as JSON first
     try {
-      const jsonData = JSON.parse(output)
+      const jsonData = JSON.parse(output) as SkillGroup
       return (
         <div className="space-y-4">
-          {Object.entries(jsonData).map(([key, value]: [string, any]) => (
+          {Object.entries(jsonData).map(([key, value]) => (
             <div key={key} className="space-y-2">
               <div className="text-accent-1 font-semibold">{key}:</div>
               {Array.isArray(value) ? (
@@ -219,7 +223,7 @@ export default function About() {
                 </div>
               ) : (
                 <div className="pl-4 space-y-2">
-                  {Object.entries(value).map(([subKey, subValue]: [string, any]) => (
+                  {Object.entries(value).map(([subKey, subValue]) => (
                     <div key={subKey}>
                       <span className="text-accent-2">{subKey}:</span>
                       {Array.isArray(subValue) ? (
@@ -233,7 +237,7 @@ export default function About() {
                         </div>
                       ) : (
                         <div className="pl-4 space-y-2">
-                          {Object.entries(subValue).map(([subSubKey, subSubValue]: [string, any]) => (
+                          {Object.entries(subValue).map(([subSubKey, subSubValue]) => (
                             <div key={subSubKey}>
                               <span className="text-accent-2">{subSubKey}:</span>
                               <div className="flex flex-wrap gap-2 mt-1">
