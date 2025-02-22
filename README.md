@@ -1,3 +1,66 @@
+# My Portfolio
+
+A modern, interactive portfolio showcasing my work as a Full Stack Developer.
+
+## About Me
+
+I'm a Full Stack Developer with 5+ years of experience in building scalable web and mobile applications. My expertise spans across modern web technologies, cloud solutions, and mobile development.
+
+### What I Do
+
+- 🌐 **Web Development**: Building responsive, performant web applications using Next.js, React, and Three.js
+- 📱 **Mobile Development**: Creating cross-platform mobile apps with React Native and Expo
+- 🛠 **Backend Development**: Developing robust backend services using Node.js, Express, and Socket.io
+- 🗄 **Database Management**: Working with both SQL (PostgreSQL) and NoSQL (MongoDB) databases
+- ☁️ **Cloud Solutions**: Deploying and managing applications on AWS and Digital Ocean
+- 🔧 **DevOps**: Setting up CI/CD pipelines and managing infrastructure with Docker and Nginx
+
+### Technical Skills
+
+- **Frontend**: Next.js, React, Three.js, Tailwind CSS
+- **Mobile**: React Native, Expo
+- **Backend**: Node.js, Bun, Express, Socket.io
+- **Databases**: MongoDB, PostgreSQL, Prisma
+- **Cloud**: AWS, Digital Ocean
+- **Tools**: Docker, Nginx, Git
+
+### My Approach
+
+I'm passionate about creating exceptional digital experiences that combine cutting-edge technology with elegant design. I focus on:
+
+- Building scalable and maintainable applications
+- Implementing best practices and modern development patterns
+- Creating intuitive and responsive user interfaces
+- Optimizing performance and user experience
+- Solving complex technical challenges
+
+### Get in Touch
+
+- 💼 [LinkedIn](https://linkedin.com)
+- 💻 [GitHub](https://github.com)
+- 📱 [WhatsApp](https://wa.me/919063259072)
+
+## Portfolio Website
+
+This portfolio is built with:
+
+- Next.js 14 (React)
+- TypeScript
+- Three.js for 3D graphics
+- Framer Motion for animations
+- Tailwind CSS for styling
+- Formspree for contact form
+
+### Features
+
+- Responsive design
+- Interactive 3D elements
+- Smooth animations
+- Dark theme
+- Contact form integration
+- Real-time typing effects
+- Terminal-style about section
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
