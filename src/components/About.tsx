@@ -179,14 +179,14 @@ export default function About() {
     if (typedCommand.length < currentCommand.length) {
       const timeout = setTimeout(() => {
         setTypedCommand(currentCommand.slice(0, typedCommand.length + 1))
-      }, 100)
+      }, 50)
       return () => clearTimeout(timeout)
     } 
     
     if (!showOutput) {
       const timeout = setTimeout(() => {
         setShowOutput(true)
-      }, 500)
+      }, 300)
       return () => clearTimeout(timeout)
     }
 
@@ -194,7 +194,7 @@ export default function About() {
       setCommandIndex(commandIndex + 1)
       setTypedCommand('')
       setShowOutput(false)
-    }, 3000)
+    }, 2000)
     return () => clearTimeout(timeout)
 
   }, [inView, commandIndex, typedCommand, showOutput])
@@ -271,7 +271,7 @@ export default function About() {
         ref={ref}
         initial={{ opacity: 0, y: 20 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 0.5 }}
         className="max-w-4xl mx-auto"
       >
         <div className="text-center mb-12">

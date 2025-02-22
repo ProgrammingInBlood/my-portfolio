@@ -81,6 +81,7 @@ const technologies = [
 
 export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [isTouchDevice, setIsTouchDevice] = useState(false)
   const containerRef = useRef(null)
   useScroll({
     target: containerRef,
@@ -89,12 +90,22 @@ export default function Home() {
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
   
   useEffect(() => {
+    // Check if it's a touch device
+    setIsTouchDevice('ontouchstart' in window)
+    
+    // Set initial position to center
+    setMousePosition({ x: 0, y: 0 })
+
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 2 - 1,
-        y: -(e.clientY / window.innerHeight) * 2 + 1,
-      })
+      // Only update if not a touch device
+      if (!('ontouchstart' in window)) {
+        setMousePosition({
+          x: (e.clientX / window.innerWidth) * 2 - 1,
+          y: -(e.clientY / window.innerHeight) * 2 + 1,
+        })
+      }
     }
+
     window.addEventListener('mousemove', handleMouseMove)
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
@@ -127,16 +138,16 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <div ref={containerRef} className="relative h-screen grid grid-cols-1 lg:grid-cols-2 gap-8 overflow-hidden">
+      <div ref={containerRef} className="relative h-screen grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 overflow-hidden">
         {/* Left Content */}
-        <div className="relative z-10 flex flex-col justify-center px-8 lg:px-16">
+        <div className="relative z-10 flex flex-col justify-center px-4 sm:px-8 lg:px-16">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="space-y-6"
+            className="space-y-4 lg:space-y-6"
           >
-            <h1 className="text-5xl lg:text-7xl font-bold space-y-4">
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold space-y-2 lg:space-y-4">
               <AnimatedText text="Building" delay={0.2} />
               <br />
               <AnimatedText text="Digital" delay={0.3} />
@@ -148,7 +159,7 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="text-xl text-gray-300 max-w-lg"
+              className="text-lg sm:text-xl text-gray-300 max-w-lg"
             >
               5+ years of expertise in crafting scalable applications 
               and innovative solutions for complex problems.
@@ -158,7 +169,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
-              className="flex flex-wrap gap-4 pt-4"
+              className="flex flex-wrap gap-2 sm:gap-4 pt-4"
             >
               {technologies.map(({ name, icon }, index) => (
                 <motion.div
@@ -166,7 +177,7 @@ export default function Home() {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.3, delay: index * 0.1 + 0.8 }}
-                  className="glass px-4 py-2 rounded-full flex items-center space-x-2"
+                  className="glass px-3 py-1.5 sm:px-4 sm:py-2 rounded-full flex items-center space-x-2 text-sm sm:text-base"
                 >
                   <span role="img" aria-label={name}>{icon}</span>
                   <span>{name}</span>
@@ -178,12 +189,12 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1 }}
-              className="flex gap-6 pt-8"
+              className="flex gap-4 sm:gap-6 pt-6 sm:pt-8"
             >
-              <a href="#projects" className="btn-primary">
+              <a href="#projects" className="btn-primary text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3">
                 View Projects
               </a>
-              <a href="#contact" className="btn-secondary">
+              <a href="#contact" className="btn-secondary text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3">
                 Get in Touch
               </a>
             </motion.div>
@@ -191,7 +202,7 @@ export default function Home() {
         </div>
 
         {/* Right 3D Scene */}
-        <div className="absolute lg:relative inset-0 w-full h-full opacity-20 lg:opacity-100">
+        <div className={`absolute lg:relative inset-0 w-full h-full ${isTouchDevice ? 'opacity-30 sm:opacity-40' : 'opacity-10 sm:opacity-20'} lg:opacity-100`}>
           <Canvas
             camera={{ position: [0, 0, 8], fov: 45 }}
             gl={{ antialias: true }}
@@ -200,7 +211,7 @@ export default function Home() {
             <color attach="background" args={['transparent']} />
             <fog attach="fog" args={['#000', 5, 15]} />
             <Suspense fallback={null}>
-              <Scene mousePosition={mousePosition} />
+              <Scene mousePosition={isTouchDevice ? { x: 0, y: 0 } : mousePosition} />
             </Suspense>
           </Canvas>
         </div>
@@ -210,7 +221,7 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5, delay: 1.2 }}
-          className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
+          className="absolute bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2"
         >
           <motion.div
             animate={{ 
