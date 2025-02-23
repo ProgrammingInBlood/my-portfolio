@@ -82,11 +82,9 @@ const technologies = [
 export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isTouchDevice, setIsTouchDevice] = useState(false)
+  const [showScroll, setShowScroll] = useState(true)
   const containerRef = useRef(null)
-  useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"]
-  })
+  const { scrollY } = useScroll()
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
   
   useEffect(() => {
@@ -109,6 +107,13 @@ export default function Home() {
     window.addEventListener('mousemove', handleMouseMove)
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
+
+  useEffect(() => {
+    const unsubscribe = scrollY.onChange((latest) => {
+      setShowScroll(latest < 100)
+    })
+    return () => unsubscribe()
+  }, [scrollY])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -138,75 +143,20 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <div ref={containerRef} className="relative h-screen grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 overflow-hidden">
-        {/* Left Content */}
-        <div className="relative z-10 flex flex-col justify-center px-4 sm:px-8 lg:px-16">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-4 lg:space-y-6"
-          >
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold space-y-2 lg:space-y-4">
-              <AnimatedText text="Building" delay={0.2} />
-              <br />
-              <AnimatedText text="Digital" delay={0.3} />
-              <br />
-              <AnimatedText text="Experiences" delay={0.4} />
-            </h1>
-
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="text-lg sm:text-xl text-gray-300 max-w-lg"
-            >
-              5+ years of expertise in crafting scalable applications 
-              and innovative solutions for complex problems.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="flex flex-wrap gap-2 sm:gap-4 pt-4"
-            >
-              {technologies.map(({ name, icon }, index) => (
-                <motion.div
-                  key={name}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 + 0.8 }}
-                  className="glass px-3 py-1.5 sm:px-4 sm:py-2 rounded-full flex items-center space-x-2 text-sm sm:text-base"
-                >
-                  <span role="img" aria-label={name}>{icon}</span>
-                  <span>{name}</span>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 1 }}
-              className="flex gap-4 sm:gap-6 pt-6 sm:pt-8"
-            >
-              <a href="#projects" className="btn-primary text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3">
-                View Projects
-              </a>
-              <a href="#contact" className="btn-secondary text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3">
-                Get in Touch
-              </a>
-            </motion.div>
-          </motion.div>
-        </div>
-
-        {/* Right 3D Scene */}
-        <div className={`absolute lg:relative inset-0 w-full h-full ${isTouchDevice ? 'opacity-30 sm:opacity-40' : 'opacity-10 sm:opacity-20'} lg:opacity-100`}>
+      <div ref={containerRef} className="relative h-screen overflow-hidden bg-black lg:bg-white">
+        {/* Mobile Background */}
+        <div className="absolute inset-0 bg-black/80 lg:hidden z-10" />
+        
+        {/* Desktop Gradient */}
+        <div className="absolute inset-0 hidden lg:block bg-gradient-to-r from-black from-45% via-black/70 via-65% to-transparent z-10" />
+        
+        {/* 3D Scene Background */}
+        <div className="absolute inset-0 w-full h-full opacity-50 lg:opacity-100 lg:w-1/2 lg:left-1/2 transition-all duration-300">
           <Canvas
             camera={{ position: [0, 0, 8], fov: 45 }}
             gl={{ antialias: true }}
             dpr={[1, 2]}
+            className="w-full h-full"
           >
             <color attach="background" args={['transparent']} />
             <fog attach="fog" args={['#000', 5, 15]} />
@@ -216,36 +166,101 @@ export default function Home() {
           </Canvas>
         </div>
 
+        {/* Content Grid */}
+        <div className="relative z-20 h-full grid grid-cols-1 lg:grid-cols-2">
+          {/* Left Content */}
+          <div className="relative flex flex-col justify-center px-4 sm:px-6 lg:px-12 mt-[-5%] sm:mt-0">
+            <motion.div className="relative space-y-3 sm:space-y-4 lg:space-y-5">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold space-y-1 sm:space-y-2 lg:space-y-3 text-white tracking-tight leading-[1.1]">
+                <AnimatedText text="Building" delay={0.2} />
+                <br />
+                <AnimatedText text="Digital" delay={0.3} />
+                <br />
+                <AnimatedText text="Experiences" delay={0.4} />
+              </h1>
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+                className="text-base sm:text-lg text-gray-200 max-w-lg font-normal leading-relaxed"
+              >
+                5+ years of expertise in crafting scalable applications 
+                and innovative solutions for complex problems.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
+                className="flex flex-wrap gap-2 sm:gap-2.5 lg:gap-3 pt-4 sm:pt-6 lg:pt-8"
+              >
+                {technologies.map(({ name, icon }, index) => (
+                  <motion.div
+                    key={name}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 + 0.8 }}
+                    className="bg-white/10 backdrop-blur-sm px-3 py-1.5 sm:px-3 sm:py-1.5 lg:px-4 lg:py-2 rounded-full flex items-center space-x-2 text-sm lg:text-base shadow-lg border border-white/20"
+                  >
+                    <span role="img" aria-label={name} className="text-white text-lg sm:text-xl lg:text-2xl">{icon}</span>
+                    <span className="text-white font-medium">{name}</span>
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1 }}
+                className="flex flex-col sm:flex-row gap-2 sm:gap-3 lg:gap-4 pt-6 sm:pt-6 lg:pt-8 w-full sm:w-auto"
+              >
+                <a href="#projects" className="bg-white text-black hover:bg-gray-100 text-base px-6 py-3 sm:px-6 sm:py-2.5 lg:px-6 lg:py-3 rounded-full shadow-lg transition-all font-semibold text-center">
+                  View Projects
+                </a>
+                <a href="#contact" className="bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white/20 text-base px-6 py-3 sm:px-6 sm:py-2.5 lg:px-6 lg:py-3 rounded-full shadow-lg transition-all font-semibold text-center">
+                  Get in Touch
+                </a>
+              </motion.div>
+            </motion.div>
+          </div>
+
+          {/* Right Content - Empty to show 3D scene */}
+          <div className="relative" />
+        </div>
+
         {/* Scroll Indicator */}
         <motion.div 
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.5, delay: 1.2 }}
-          className="absolute bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2"
+          animate={{ opacity: showScroll ? 1 : 0 }}
+          transition={{ duration: 0.3 }}
+          className="fixed bottom-6 sm:bottom-8 lg:bottom-12 left-1/2 transform -translate-x-1/2 z-50 pointer-events-none"
         >
           <motion.div
             animate={{ 
-              y: [0, 10, 0],
+              y: [0, 12, 0],
             }}
             transition={{
-              duration: 1.5,
+              duration: 2,
               repeat: Infinity,
               repeatType: "reverse",
+              ease: "easeInOut"
             }}
-            className="flex flex-col items-center"
+            className="flex flex-col items-center backdrop-blur-md bg-white/20 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full border border-white/30 shadow-lg"
           >
-            <span className="text-sm text-accent-1 font-mono mb-2">Scroll</span>
-            <div className="w-5 h-9 border-2 border-accent-1 rounded-full flex justify-center p-1">
+            <span className="text-[10px] sm:text-xs text-white font-medium tracking-wider uppercase mb-1 sm:mb-1.5">Scroll</span>
+            <div className="w-3.5 h-6 sm:w-4 sm:h-7 border-2 border-white rounded-full flex justify-center p-1">
               <motion.div
                 animate={{ 
                   y: [0, 12, 0],
                 }}
                 transition={{
-                  duration: 1.5,
+                  duration: 2,
                   repeat: Infinity,
                   repeatType: "reverse",
+                  ease: "easeInOut"
                 }}
-                className="w-1.5 h-1.5 bg-accent-1 rounded-full"
+                className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"
               />
             </div>
           </motion.div>
@@ -267,23 +282,23 @@ export default function Home() {
           viewport={{ once: true }}
           className="max-w-4xl mx-auto text-center"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-8 gradient-text">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 sm:mb-8 lg:mb-10 gradient-text tracking-tight leading-[1.1]">
             Let&apos;s Create Something Amazing
           </h2>
-          <p className="text-gray-300 mb-12 text-lg">
+          <p className="text-base sm:text-lg lg:text-xl text-gray-300 mb-10 sm:mb-12 lg:mb-16 max-w-2xl mx-auto leading-relaxed">
             Ready to bring your vision to life? I&apos;m here to help transform your ideas into reality.
           </p>
           
           <form onSubmit={handleSubmit} className="space-y-6 max-w-xl mx-auto glass p-8 rounded-2xl">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-sm text-gray-400 block text-left">Name</label>
+                <label className="text-sm sm:text-base text-gray-400 block text-left font-medium">Name</label>
                 <input
                   type="text"
                   name="name"
                   required
                   placeholder="What should I call you?"
-                  className="input"
+                  className="input text-base sm:text-lg"
                 />
               </div>
               <div className="space-y-2">
