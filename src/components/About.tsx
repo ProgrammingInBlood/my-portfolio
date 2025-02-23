@@ -180,7 +180,6 @@ export default function About() {
   const [commandIndex, setCommandIndex] = useState(0)
   const [typedCommand, setTypedCommand] = useState('')
   const [showOutput, setShowOutput] = useState(false)
-  const [completedCommands, setCompletedCommands] = useState<number[]>([])
   const terminalRef = useRef<HTMLDivElement>(null)
   
   const [ref, inView] = useInView({
@@ -188,7 +187,6 @@ export default function About() {
     threshold: 0.1
   })
 
-  // Scroll to bottom when new command is shown
   useEffect(() => {
     if (terminalRef.current) {
       terminalRef.current.scrollTo({
@@ -213,7 +211,6 @@ export default function About() {
     if (!showOutput) {
       const timeout = setTimeout(() => {
         setShowOutput(true)
-        setCompletedCommands(prev => [...prev, commandIndex])
       }, 300)
       return () => clearTimeout(timeout)
     }
@@ -227,7 +224,7 @@ export default function About() {
 
   }, [inView, commandIndex, typedCommand, showOutput])
 
-  const renderOutput = (output: string | ReactNode, index: number) => {
+  const renderOutput = (output: string | ReactNode) => {
     if (typeof output !== 'string') {
       return output
     }
@@ -328,14 +325,14 @@ export default function About() {
           </div>
           
           <div ref={terminalRef} className="p-6 font-mono text-sm md:text-base bg-black/20 max-h-[600px] overflow-y-auto">
-            {commands.slice(0, commandIndex).map((cmd, index) => (
-              <div key={index} className="mb-8">
+            {commands.slice(0, commandIndex).map((cmd, i) => (
+              <div key={i} className="mb-8">
                 <div className="flex items-center gap-2 text-accent-2">
                   <span className="text-accent-1">❯</span>
                   <span>{cmd.command}</span>
                 </div>
                 <div className="mt-4 pl-4 border-l-2 border-accent-1/20">
-                  {renderOutput(cmd.output, index)}
+                  {renderOutput(cmd.output)}
                 </div>
               </div>
             ))}
@@ -362,7 +359,7 @@ export default function About() {
                     transition={{ duration: 0.3 }}
                     className="mt-4 pl-4 border-l-2 border-accent-1/20"
                   >
-                    {renderOutput(commands[commandIndex].output, commandIndex)}
+                    {renderOutput(commands[commandIndex].output)}
                   </motion.div>
                 )}
               </motion.div>
