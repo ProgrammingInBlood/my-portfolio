@@ -324,7 +324,7 @@ export default function About() {
             <span className="ml-2 text-sm text-gray-400 font-mono">eklavya@portfolio ~ </span>
           </div>
           
-          <div ref={terminalRef} className="p-6 font-mono text-sm md:text-base bg-black/20 max-h-[600px] overflow-y-auto">
+          <div ref={terminalRef} className="p-6 font-mono text-sm md:text-base bg-black/20 h-[400px] sm:h-[500px] md:h-[600px] overflow-y-auto custom-scrollbar">
             {commands.slice(0, commandIndex).map((cmd, i) => (
               <div key={i} className="mb-8">
                 <div className="flex items-center gap-2 text-accent-2">
@@ -366,6 +366,25 @@ export default function About() {
             )}
           </div>
         </div>
+
+        <style jsx global>{`
+          .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+          }
+          
+          .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+          }
+          
+          .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: var(--accent-1);
+            border-radius: 4px;
+          }
+          
+          .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-2);
+          }
+        `}</style>
       </motion.div>
     </section>
   )
