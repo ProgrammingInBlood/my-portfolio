@@ -6,6 +6,14 @@ import Image from 'next/image'
 
 const projects = [
   {
+    title: 'DBZ Beds',
+    description: 'A comprehensive e-commerce platform for luxury beds and furniture. Features include product customization with bed size/type variations, integrated payment solutions, and a custom bed builder. Built with focus on user experience and performance.',
+    tech: ['Next.js', 'Node.js', 'MongoDB', 'AWS', 'Nginx', 'Tailwind CSS', 'Stripe'],
+    image: '/projects/dbzbeds.png',
+    link: 'https://www.dbzbeds.co.uk',
+    github: null // NDA project
+  },
+  {
     title: 'Beds Divans',
     description: 'A comprehensive e-commerce platform for luxury beds and furniture. Features include product customization, real-time inventory management, and secure payments with Klarna integration.',
     tech: ['Next.js', 'Node.js', 'MongoDB', 'Klarna', 'Digital Ocean', 'Nginx', 'Tailwind CSS'],
