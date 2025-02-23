@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { useEffect, useState, ReactNode } from 'react'
+import { useEffect, useState, ReactNode, useRef } from 'react'
 import { SiReact, SiNodedotjs, SiNextdotjs, SiThreedotjs, SiMongodb, SiPostgresql, SiPrisma, SiExpo, SiSocketdotio, SiTailwindcss, SiDigitalocean, SiNginx, SiBun, SiTypescript, SiJavascript } from 'react-icons/si'
 import { FaAws, FaUser, FaCode, FaHeart } from 'react-icons/fa'
 
@@ -26,12 +26,17 @@ const commands = [
     )
   },
   { 
-    command: 'cat skills.json',
+    command: 'cat languages.json',
     output: `{
   "languages": [
     { "name": "TypeScript", "icon": "typescript" },
     { "name": "JavaScript", "icon": "javascript" }
-  ],
+  ]
+}`
+  },
+  { 
+    command: 'cat frontend.json',
+    output: `{
   "frontend": {
     "web": [
       { "name": "React", "icon": "react" },
@@ -43,7 +48,12 @@ const commands = [
       { "name": "React Native", "icon": "react" },
       { "name": "Expo", "icon": "expo" }
     ]
+  }
+}`
   },
+  { 
+    command: 'cat backend.json',
+    output: `{
   "backend": {
     "runtime": [
       { "name": "Node.js", "icon": "nodejs" },
@@ -62,7 +72,12 @@ const commands = [
         { "name": "MongoDB", "icon": "mongodb" }
       ]
     }
+  }
+}`
   },
+  { 
+    command: 'cat devops.json',
+    output: `{
   "devops": {
     "cloud": [
       { "name": "AWS", "icon": "aws" },
@@ -165,11 +180,23 @@ export default function About() {
   const [commandIndex, setCommandIndex] = useState(0)
   const [typedCommand, setTypedCommand] = useState('')
   const [showOutput, setShowOutput] = useState(false)
+  const [completedCommands, setCompletedCommands] = useState<number[]>([])
+  const terminalRef = useRef<HTMLDivElement>(null)
   
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1
   })
+
+  // Scroll to bottom when new command is shown
+  useEffect(() => {
+    if (terminalRef.current) {
+      terminalRef.current.scrollTo({
+        top: terminalRef.current.scrollHeight,
+        behavior: 'smooth'
+      })
+    }
+  }, [commandIndex, showOutput])
 
   useEffect(() => {
     if (!inView || commandIndex >= commands.length) return
@@ -186,6 +213,7 @@ export default function About() {
     if (!showOutput) {
       const timeout = setTimeout(() => {
         setShowOutput(true)
+        setCompletedCommands(prev => [...prev, commandIndex])
       }, 300)
       return () => clearTimeout(timeout)
     }
@@ -199,12 +227,11 @@ export default function About() {
 
   }, [inView, commandIndex, typedCommand, showOutput])
 
-  const renderOutput = (output: string | ReactNode) => {
+  const renderOutput = (output: string | ReactNode, index: number) => {
     if (typeof output !== 'string') {
       return output
     }
 
-    // Try to parse as JSON first
     try {
       const jsonData = JSON.parse(output) as SkillGroup
       return (
@@ -215,7 +242,10 @@ export default function About() {
               {Array.isArray(value) ? (
                 <div className="flex flex-wrap gap-2">
                   {value.map((item: SkillItem, i: number) => (
-                    <div key={i} className="flex items-center gap-2 px-2 py-1 rounded-md bg-accent-1/10">
+                    <div
+                      key={i}
+                      className="flex items-center gap-2 px-2 py-1 rounded-md bg-accent-1/10"
+                    >
                       {iconMap[item.icon]}
                       <span className="text-accent-2">{item.name}</span>
                     </div>
@@ -229,7 +259,10 @@ export default function About() {
                       {Array.isArray(subValue) ? (
                         <div className="flex flex-wrap gap-2 mt-1">
                           {subValue.map((item: SkillItem, i: number) => (
-                            <div key={i} className="flex items-center gap-2 px-2 py-1 rounded-md bg-accent-1/10">
+                            <div
+                              key={i}
+                              className="flex items-center gap-2 px-2 py-1 rounded-md bg-accent-1/10"
+                            >
                               {iconMap[item.icon]}
                               <span className="text-accent-2">{item.name}</span>
                             </div>
@@ -242,7 +275,10 @@ export default function About() {
                               <span className="text-accent-2">{subSubKey}:</span>
                               <div className="flex flex-wrap gap-2 mt-1">
                                 {Array.isArray(subSubValue) && subSubValue.map((item: SkillItem, i: number) => (
-                                  <div key={i} className="flex items-center gap-2 px-2 py-1 rounded-md bg-accent-1/10">
+                                  <div
+                                    key={i}
+                                    className="flex items-center gap-2 px-2 py-1 rounded-md bg-accent-1/10"
+                                  >
                                     {iconMap[item.icon]}
                                     <span className="text-accent-2">{item.name}</span>
                                   </div>
@@ -291,26 +327,25 @@ export default function About() {
             <span className="ml-2 text-sm text-gray-400 font-mono">eklavya@portfolio ~ </span>
           </div>
           
-          <div className="p-6 font-mono text-sm md:text-base bg-black/20">
+          <div ref={terminalRef} className="p-6 font-mono text-sm md:text-base bg-black/20 max-h-[600px] overflow-y-auto">
             {commands.slice(0, commandIndex).map((cmd, index) => (
               <div key={index} className="mb-8">
                 <div className="flex items-center gap-2 text-accent-2">
                   <span className="text-accent-1">❯</span>
                   <span>{cmd.command}</span>
                 </div>
-                <motion.div 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                  className="mt-4 pl-4 border-l-2 border-accent-1/20"
-                >
-                  {renderOutput(cmd.output)}
-                </motion.div>
+                <div className="mt-4 pl-4 border-l-2 border-accent-1/20">
+                  {renderOutput(cmd.output, index)}
+                </div>
               </div>
             ))}
             
             {commandIndex < commands.length && (
-              <div>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
                 <div className="flex items-center gap-2 text-accent-2">
                   <span className="text-accent-1">❯</span>
                   <span>{typedCommand}</span>
@@ -322,15 +357,15 @@ export default function About() {
                 </div>
                 {showOutput && (
                   <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5 }}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
                     className="mt-4 pl-4 border-l-2 border-accent-1/20"
                   >
-                    {renderOutput(commands[commandIndex].output)}
+                    {renderOutput(commands[commandIndex].output, commandIndex)}
                   </motion.div>
                 )}
-              </div>
+              </motion.div>
             )}
           </div>
         </div>

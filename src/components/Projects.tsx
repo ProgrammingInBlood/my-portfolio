@@ -2,31 +2,24 @@
 
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import Image from 'next/image'
 
 const projects = [
   {
-    title: 'E-Commerce Platform',
-    description: 'A full-stack e-commerce solution with real-time inventory, secure payments, and admin dashboard. Features include user authentication, product management, and analytics.',
-    tech: ['Next.js', 'Node.js', 'MongoDB', 'Redux', 'Stripe', 'WebSocket'],
-    image: '/project1.jpg',
-    link: '#',
-    github: '#'
+    title: 'Beds Divans',
+    description: 'A comprehensive e-commerce platform for luxury beds and furniture. Features include product customization, real-time inventory management, and secure payments with Klarna integration.',
+    tech: ['Next.js', 'Node.js', 'MongoDB', 'Klarna', 'Digital Ocean', 'Nginx', 'Tailwind CSS'],
+    image: '/projects/bedsdivans.png',
+    link: 'https://bedsdivans.co.uk',
+    github: null // NDA project
   },
   {
-    title: 'Task Management System',
-    description: 'Enterprise-grade project management tool with real-time collaboration, task tracking, and team communication features. Includes Kanban boards and timeline views.',
-    tech: ['React', 'Express', 'MongoDB', 'Socket.io', 'JWT', 'Redis'],
-    image: '/project2.jpg',
-    link: '#',
-    github: '#'
-  },
-  {
-    title: 'AI-Powered Analytics Dashboard',
-    description: 'Data visualization platform that leverages machine learning for predictive analytics. Features interactive charts, custom reporting, and automated insights.',
-    tech: ['React', 'Python', 'TensorFlow', 'D3.js', 'FastAPI', 'PostgreSQL'],
-    image: '/project3.jpg',
-    link: '#',
-    github: '#'
+    title: 'Tiny Miny Mo',
+    description: "An innovative e-commerce solution for children's clothing and accessories. Features include advanced filtering, wishlist functionality, and secure payments with Razorpay integration.",
+    tech: ['Next.js', 'Node.js', 'MongoDB', 'Razorpay', 'AWS', 'Tailwind CSS'],
+    image: '/projects/tinyminymo.jpg',
+    link: 'https://www.tinyminymo.com',
+    github: 'https://github.com/ProgrammingInBlood/tinyminymo-public-preview'
   }
 ]
 
@@ -54,7 +47,7 @@ export default function Projects() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {projects.map((project, index) => (
             <motion.div
               key={index}
@@ -63,8 +56,16 @@ export default function Projects() {
               transition={{ duration: 0.8, delay: index * 0.2 }}
               className="card group"
             >
-              <div className="aspect-video relative bg-gradient-to-br from-accent-1/20 to-accent-2/20">
-                <div className="absolute inset-0 bg-black/50 group-hover:bg-black/40 transition-all duration-300" />
+              <div className="aspect-video relative overflow-hidden rounded-t-xl">
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw"
+                  priority={index === 0}
+                />
+                <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-all duration-300" />
               </div>
               <div className="p-6 space-y-4">
                 <h3 className="text-2xl font-bold text-white group-hover:gradient-text transition-all duration-300">
@@ -86,16 +87,22 @@ export default function Projects() {
                 <div className="flex gap-4 pt-4">
                   <a
                     href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="btn-primary flex-1 text-center"
                   >
-                    Live Demo
+                    Visit Site
                   </a>
-                  <a
-                    href={project.github}
-                    className="btn-secondary flex-1 text-center"
-                  >
-                    View Code
-                  </a>
+                  {project.github && (
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-secondary flex-1 text-center"
+                    >
+                      View Code
+                    </a>
+                  )}
                 </div>
               </div>
             </motion.div>
