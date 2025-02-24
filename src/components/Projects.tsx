@@ -6,6 +6,14 @@ import Image from 'next/image'
 
 const projects = [
   {
+    title: 'Joyztick',
+    description: 'Next-gen gaming community platform featuring game discovery, tournament systems, real-time chat, and comprehensive stats tracking. Built with modern stack and gaming-inspired UI/UX.',
+    tech: ['Next.js 14', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'RAWG API', 'React Query'],
+    image: '/projects/joyztick.png',
+    link: 'https://joyztick.com',
+    github: 'https://github.com/ProgrammingInBlood/joyztick-next-frontend'
+  },
+  {
     title: 'DBZ Beds',
     description: 'A comprehensive e-commerce platform for luxury beds and furniture. Features include product customization with bed size/type variations, integrated payment solutions, and a custom bed builder. Built with focus on user experience and performance.',
     tech: ['Next.js', 'Node.js', 'MongoDB', 'AWS', 'Nginx', 'Tailwind CSS', 'Stripe'],
