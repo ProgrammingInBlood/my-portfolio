@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { useEffect, useState, ReactNode, useRef } from 'react'
-import { SiReact, SiNodedotjs, SiNextdotjs, SiThreedotjs, SiMongodb, SiPostgresql, SiPrisma, SiExpo, SiSocketdotio, SiTailwindcss, SiDigitalocean, SiNginx, SiBun, SiTypescript, SiJavascript } from 'react-icons/si'
+import { SiReact, SiNodedotjs, SiNextdotjs, SiThreedotjs, SiMongodb, SiPostgresql, SiPrisma, SiExpo, SiSocketdotio, SiTailwindcss, SiDigitalocean, SiNginx, SiBun, SiTypescript, SiJavascript, SiPython, SiDjango } from 'react-icons/si'
 import { FaAws, FaUser, FaCode, FaHeart } from 'react-icons/fa'
 
 interface SkillItem {
@@ -30,7 +30,8 @@ const commands = [
     output: `{
   "languages": [
     { "name": "TypeScript", "icon": "typescript" },
-    { "name": "JavaScript", "icon": "javascript" }
+    { "name": "JavaScript", "icon": "javascript" },
+    { "name": "Python", "icon": "python" }
   ]
 }`
   },
@@ -57,11 +58,13 @@ const commands = [
   "backend": {
     "runtime": [
       { "name": "Node.js", "icon": "nodejs" },
-      { "name": "Bun", "icon": "bun" }
+      { "name": "Bun", "icon": "bun" },
+      { "name": "Python", "icon": "python" }
     ],
     "frameworks": [
       { "name": "Express", "icon": "nodejs" },
-      { "name": "Socket.io", "icon": "socketio" }
+      { "name": "Socket.io", "icon": "socketio" },
+      { "name": "Django", "icon": "django" }
     ],
     "databases": {
       "sql": [
@@ -173,7 +176,9 @@ const iconMap = {
   mongodb: <SiMongodb className="text-[#47A248] text-xl" />,
   aws: <FaAws className="text-[#FF9900] text-xl" />,
   digitalocean: <SiDigitalocean className="text-[#0080FF] text-xl" />,
-  nginx: <SiNginx className="text-[#009639] text-xl" />
+  nginx: <SiNginx className="text-[#009639] text-xl" />,
+  python: <SiPython className="text-[#3776AB] text-xl" />,
+  django: <SiDjango className="text-[#092E20] text-xl" />
 }
 
 export default function About() {

@@ -6,7 +6,7 @@ import { OrbitControls, Float, MeshDistortMaterial, TorusKnot, Sphere } from '@r
 import { useEffect, useState, useRef, Suspense } from 'react'
 import Projects from '@/components/Projects'
 import About from '@/components/About'
-import { SiReact, SiNodedotjs, SiNextdotjs, SiThreedotjs, SiMongodb, SiPostgresql } from 'react-icons/si'
+import { SiReact, SiNodedotjs, SiNextdotjs, SiThreedotjs, SiMongodb, SiPostgresql, SiPython, SiDjango } from 'react-icons/si'
 import { FaAws } from 'react-icons/fa'
 
 interface SceneProps {
@@ -72,6 +72,8 @@ const technologies = [
   { name: 'Next.js', icon: <SiNextdotjs className="text-white text-2xl" /> },
   { name: 'React', icon: <SiReact className="text-[#61DAFB] text-2xl" /> },
   { name: 'React Native', icon: <SiReact className="text-[#61DAFB] text-2xl" /> },
+  { name: 'Python', icon: <SiPython className="text-[#3776AB] text-2xl" /> },
+  { name: 'Django', icon: <SiDjango className="text-[#092E20] text-2xl" /> },
   { name: 'Three.js', icon: <SiThreedotjs className="text-white text-2xl" /> },
   { name: 'Node.js', icon: <SiNodedotjs className="text-[#339933] text-2xl" /> },
   { name: 'MongoDB', icon: <SiMongodb className="text-[#47A248] text-2xl" /> },
@@ -172,11 +174,9 @@ export default function Home() {
           <div className="relative flex flex-col justify-center px-4 sm:px-6 lg:px-12 mt-[-5%] sm:mt-0">
             <motion.div className="relative space-y-3 sm:space-y-4 lg:space-y-5">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold space-y-1 sm:space-y-2 lg:space-y-3 text-white tracking-tight leading-[1.1]">
-                <AnimatedText text="Building" delay={0.2} />
+                <AnimatedText text="Building Digital" delay={0.2} />
                 <br />
-                <AnimatedText text="Digital" delay={0.3} />
-                <br />
-                <AnimatedText text="Experiences" delay={0.4} />
+                <AnimatedText text="Experiences" delay={0.3} />
               </h1>
 
               <motion.p
